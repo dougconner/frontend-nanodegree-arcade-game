@@ -43,13 +43,17 @@ var Player = function() {
     // The image/sprite for our player, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/char-boy.png';
+
+    // player start and reset position
     this.startX = 202;
     this.startY = 322;
+
+    // player move limits
     this.limits = {
-      "up": -10,
+      "up": 73,
       "down": 405,
       "left": 0,
-      "right": 40
+      "right": 404
     };
 }
 
@@ -68,11 +72,16 @@ Player.prototype.render = function() {
 }
 
 // Keyboard inputs control player motion using this method
+// Player move limits prevent movment outside image
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case "up":
           if (this.y > this.limits["up"]) {
             this.y -= 83;
+          } else {
+            // Have reached water
+            // Game won, reset
+            this.reset();
           }
           break;
         case "down":
@@ -81,31 +90,36 @@ Player.prototype.handleInput = function(key) {
           }
           break;
         case "left":
-          this.x -= 101;
+          if (this.x > this.limits["left"]) {
+            this.x -= 101;
+          }
           break;
         case "right":
-          this.x += 101;
+          if (this.x < this.limits["right"]) {
+            this.x += 101;
+          }
           break;
     }
     console.log(this.x + ", " + this.y);
+}
+
+Player.prototype.reset = function() {
+  this.x = this.startX;
+  this.y = this.startY;
 }
 
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var player = new Player;
-
-// Player starts and resets to the start position
-player.x = player.startX;
-player.y = player.startY;
-console.log("player.x = " + player.x);
-console.log("player.startX = " + player.startX);
-
 var allEnemies = [];
 var enemy1 = new Enemy;
 allEnemies.push(enemy1);
 
+var player = new Player;
+
+// reset initializes player position
+player.reset();
 
 
 // This listens for key presses and sends the keys to your
