@@ -48,6 +48,10 @@ var Player = function() {
     this.startX = 202;
     this.startY = 322;
 
+    // player pixel movement per keystroke
+    this.dx = 101;
+    this.dy = 83;
+
     // player move limits
     this.limits = {
       "up": 73,
@@ -77,7 +81,7 @@ Player.prototype.handleInput = function(key) {
     switch (key) {
         case "up":
           if (this.y > this.limits["up"]) {
-            this.y -= 83;
+            this.y -= this.dy;
           } else {
             // Have reached water
             // Game won, reset
@@ -86,17 +90,17 @@ Player.prototype.handleInput = function(key) {
           break;
         case "down":
           if (this.y < this.limits["down"]) {
-            this.y += 83;
+            this.y += this.dy;
           }
           break;
         case "left":
           if (this.x > this.limits["left"]) {
-            this.x -= 101;
+            this.x -= this.dx;
           }
           break;
         case "right":
           if (this.x < this.limits["right"]) {
-            this.x += 101;
+            this.x += this.dx;
           }
           break;
     }
