@@ -6,8 +6,21 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = -40;
-    this.y  = 0; // TODO: move to instance creation
+    this.x = 600;
+}
+
+// value for all enemies to inherit
+Enemy.prototype.constants = {
+  // dx min and max pixels/sec
+  dxMin: 100,
+  dxMax: 500,
+
+  // pixel row positions for aligning the enemy bugs
+  row: [63, 146, 229]
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // Update the enemy's position, required method for game
@@ -16,7 +29,16 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = (this.x + dt * 0) % 600;
+    // this.x = (((this.x + 100) + (dt * this.dx)) % 600) - 100;
+    if (this.x < 600) {
+      this.x = this.x + dt * this.dx;
+    } else {
+      // reset this.x for another pass, use a random speed and row
+      this.dx = getRandomInt(this.constants.dxMin, this.constants.dxMax);
+      this.y = this.constants.row[getRandomInt(0,3)];
+      this.x = -100
+
+    }
 
 }
 
@@ -64,10 +86,19 @@ var Player = function() {
 // Update the players's position, required method for game
 // Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
 
+    // check for collisions with all enemy
+    for (var i = 0; i < allEnemies.length; i++) {
+      // First check for the same row
+      if(Math.abs(this.y - allEnemies[i].y)< 20) {
+        // player and enemy in the same row
+        if(Math.abs(this.x - allEnemies[i].x) < 100) {
+          game.lost++;
+          this.reset();
+          console.log("collision! lost count = " + game.lost);
+        }
+      }
+    }
 }
 
 // Draw the layer on the screen, required method for game
@@ -84,8 +115,9 @@ Player.prototype.handleInput = function(key) {
             this.y -= this.dy;
           } else {
             // Have reached water
-            // Game won, reset
+            game.won++;
             this.reset();
+            console.log("games won = " + game.won);
           }
           break;
         case "down":
@@ -116,9 +148,21 @@ Player.prototype.reset = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+
+// keep track of wins and losses
+var game = {
+  won: 0,
+  lost: 0
+}
+
+// instantiate enemies and player
 var allEnemies = [];
-var enemy1 = new Enemy;
-allEnemies.push(enemy1);
+var totalEnemies = 4;
+
+for (var i = 0; i < totalEnemies; i++) {
+  var enemy = new Enemy;
+  allEnemies.push(enemy);
+}
 
 var player = new Player;
 
