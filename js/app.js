@@ -135,6 +135,15 @@ Player.prototype.handleInput = function(key) {
             this.x += this.dx;
           }
           break;
+        case "p":
+          console.log("player select");
+          playerSelect();
+          break;
+        case "s":
+          console.log("start game");
+          startGame();
+          break;
+
     }
     console.log(this.x + ", " + this.y);
 }
@@ -143,6 +152,22 @@ Player.prototype.reset = function() {
   this.x = this.startX;
   this.y = this.startY;
 }
+
+/*
+select player avatar
+The following actions are required:
+remove the enemies and replace with static avatars in the central squares
+start with the lowest row of stones and move up as needed
+the start position will hold the active avatar
+the active avatar is always the one highlighted by the moving outline
+movement outside the loaded avatars is not permitted.
+*/
+
+/*
+start game
+instantiate enemies and player
+reset
+*/
 
 
 // Now instantiate your objects.
@@ -158,17 +183,27 @@ var game = {
 // instantiate enemies and player
 var allEnemies = [];
 var totalEnemies = 4;
-
-for (var i = 0; i < totalEnemies; i++) {
-  var enemy = new Enemy;
-  allEnemies.push(enemy);
-}
-
 var player = new Player;
 
-// reset initializes player position
-player.reset();
+var startGame = function() {
+  // don't add enemies if they already exist
+  if (allEnemies.length === 0) {
+    for (var i = 0; i < totalEnemies; i++) {
+      var enemy = new Enemy;
+      allEnemies.push(enemy);
+    }
+  }
 
+  // reset initializes player position
+  player.reset();
+}
+
+var playerSelect = function() {
+  // stop the game
+  allEnemies.length = 0;
+  var currentAvatar = player.sprite;
+  console.log(currentAvatar);
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -177,8 +212,12 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        80: 'p',    // player select
+        83: 's'     // start game
+
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
