@@ -29,7 +29,6 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    // this.x = (((this.x + 100) + (dt * this.dx)) % 600) - 100;
     if (this.x < 600) {
       this.x = this.x + dt * this.dx;
     } else {
@@ -47,14 +46,8 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 
-
-/**** Player *****/
-
-// Now write your own player class
+//**** Player *****
 // This class requires an update(), render() and
 // a handleInput() method.
 
@@ -64,7 +57,6 @@ var Player = function() {
 
     // The image/sprite for our player, this uses
     // a helper we've provided to easily load images
-    // this.sprite = 'images/char-boy.png';
     this.sprite = 'images/char-boy.png';
 
     // player start and reset position
@@ -102,9 +94,9 @@ Player.prototype.update = function(dt) {
             this.reset();
             startGame();
           } else {
+            // just had a collision with a bug
             game.lost++;
             this.reset();
-            console.log("collision! game lost count = " + game.lost);
           }
         }
       }
@@ -114,6 +106,7 @@ Player.prototype.update = function(dt) {
 // Draw the layer on the screen, required method for game
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    // Add scoring
     ctx.font = "20px serif";
     ctx.fillText("Wins: ", 20, 40);
     ctx.fillText(game.won, 40, 80);
@@ -134,7 +127,6 @@ Player.prototype.handleInput = function(key) {
             // Have reached water
             game.won++;
             this.reset();
-            console.log("games won = " + game.won);
           }
           break;
         case "down":
@@ -153,24 +145,23 @@ Player.prototype.handleInput = function(key) {
           }
           break;
         case "p":
-          console.log("player select");
+          // player  avatar select
           playerSelect();
           break;
         case "s":
-          console.log("start game");
+          // start new game, zero score
           startGame();
           break;
 
     }
-    console.log(this.x + ", " + this.y);
 }
 
 Player.prototype.reset = function() {
   this.x = this.startX;
   this.y = this.startY;
-  // compute the new score
+  // compute the new score, block divide-by-zero
   if (game.won + game.lost > 0) {
-   game.score = game.won / (game.won + game.lost);
+   game.score = (game.won / (game.won + game.lost)).toPrecision(3);
   }
 }
 
@@ -183,23 +174,6 @@ var avatarList =
   "char-pink-girl",
   "char-princess-girl"
   ];
-
-
-/*
-select player avatar
-The following actions are required:
-remove the enemies and replace with static avatars in the central squares
-start with the lowest row of stones and move up as needed
-the start position will hold the active avatar
-the active avatar is always the one highlighted by the moving outline
-movement outside the loaded avatars is not permitted.
-*/
-
-/*
-start game
-instantiate enemies and player
-reset
-*/
 
 
 // Now instantiate your objects.
@@ -221,8 +195,8 @@ var player = new Player;
 var playerSelect = function() {
   // stop the game
   allEnemies.length = 0;
+  // Use the Gem Blue image as the avatar selector
   player.sprite = 'images/Gem Blue.png';
-  console.log(player.sprite);
   // use a loop to instantiate one enemy for each avatar
   for (var i = 0; i < avatarList.length; i++) {
     var enemy = new Enemy;
@@ -231,7 +205,7 @@ var playerSelect = function() {
     // set the (x, y) position for each avatar
     enemy.y = enemy.constants.row[1];
     enemy.x = i * 101;
-    // set enemy.dx = 0 so it won't move
+    // set enemy.dx = 0 so avatars won't move
     enemy.dx = 0;
     allEnemies.push(enemy);
   }
@@ -249,6 +223,10 @@ var startGame = function() {
   game.score = 0;
   game.won = 0;
   game.lost = 0;
+  // If a player avatar has not been selected use default
+  if (player.sprite === 'images/Gem Blue.png') {
+    player.sprite = 'images/char-boy.png';
+  }
 }
 
   // reset initializes player position
