@@ -1,12 +1,11 @@
 // Enemies our player must avoid
 var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+    // Variables applied to each instance
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.x = 600;
+    this.x = 606;
 }
 
 // value for all enemies to inherit
@@ -29,13 +28,13 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    if (this.x < 600) {
+    if (this.x < 605) {
       this.x = this.x + dt * this.dx;
     } else {
       // reset this.x for another pass, use a random speed and row
       this.dx = getRandomInt(this.constants.dxMin, this.constants.dxMax);
       this.y = this.constants.row[getRandomInt(0,3)];
-      this.x = -100
+      this.x = -101
 
     }
 
@@ -152,6 +151,21 @@ Player.prototype.handleInput = function(key) {
           // start new game, zero score
           startGame();
           break;
+        case "3":
+          // 3 enemies
+          totalEnemies = 3;
+          startGame();
+          break;
+        case "4":
+          // 4 enemies
+          totalEnemies = 4;
+          startGame();
+          break;
+        case "5":
+          // 5 enemies
+          totalEnemies = 5;
+          startGame();
+          break;
 
     }
 }
@@ -241,6 +255,9 @@ document.addEventListener('keyup', function(e) {
         38: 'up',
         39: 'right',
         40: 'down',
+        51: '3',    // 3 enemies
+        52: '4',    // 4 enemies
+        53: '5',    // 5 enemies
         80: 'p',    // player select
         83: 's'     // start game
 
