@@ -25,19 +25,15 @@ function getRandomInt(min, max) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     if (this.x < 605) {
       this.x = this.x + dt * this.dx;
     } else {
       // reset this.x for another pass, use a random speed and row
       this.dx = getRandomInt(this.constants.dxMin, this.constants.dxMax);
       this.y = this.constants.row[getRandomInt(0,3)];
+      // start off-screen left
       this.x = -101
-
     }
-
 }
 
 // Draw the enemy on the screen, required method for game
@@ -46,16 +42,12 @@ Enemy.prototype.render = function() {
 }
 
 
-//**** Player *****
-// This class requires an update(), render() and
-// a handleInput() method.
+//*************** Player ***********************
 
 var Player = function() {
-    // Variables applied to each of our instances go here,
-    // should just need one instance
+    // Variables applied to each instance
 
-    // The image/sprite for our player, this uses
-    // a helper we've provided to easily load images
+    // Default image/sprite for our player
     this.sprite = 'images/char-boy.png';
 
     // player start and reset position
@@ -66,7 +58,7 @@ var Player = function() {
     this.dx = 101;
     this.dy = 83;
 
-    // player move limits
+    // Player move limits
     this.limits = {
       "up": 73,
       "down": 405,
@@ -79,21 +71,21 @@ var Player = function() {
 // Parameter: dt, a time delta between ticks
 Player.prototype.update = function(dt) {
 
-    // check for collisions with all enemy
+    // Check for collisions with all enemies
     for (var i = 0; i < allEnemies.length; i++) {
       // First check for the same row
       if(Math.abs(this.y - allEnemies[i].y)< 20) {
-        // player and enemy in the same row
-        // or selecting new avatar
+        // Check for same column
         if(Math.abs(this.x - allEnemies[i].x) < 101) {
+
+          // Selecting a new avatar
           if (player.sprite === 'images/Gem Blue.png') {
-            // selecting a new avatar
             player.sprite = 'images/' + avatarList[this.x / this.dx] + '.png';
-            // start the game
             this.reset();
             startGame();
+
+          // Collision with an enemy
           } else {
-            // just had a collision with a bug
             game.lost++;
             this.reset();
           }
@@ -102,9 +94,10 @@ Player.prototype.update = function(dt) {
     }
 }
 
-// Draw the layer on the screen, required method for game
+// Draw the layer on the screen
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
     // Add scoring
     ctx.font = "20px serif";
     ctx.fillText("Wins: ", 20, 40);
@@ -115,15 +108,15 @@ Player.prototype.render = function() {
     ctx.fillText(game.lost, 454, 80);
 }
 
-// Keyboard inputs control player motion using this method
-// Player move limits prevent movment outside image
+// Keyboard inputs control game function
 Player.prototype.handleInput = function(key) {
     switch (key) {
         case "up":
           if (this.y > this.limits["up"]) {
             this.y -= this.dy;
+
+          // Have reached water
           } else {
-            // Have reached water
             game.won++;
             this.reset();
           }
@@ -144,26 +137,26 @@ Player.prototype.handleInput = function(key) {
           }
           break;
         case "p":
-          // player  avatar select
+          // Player selection of avatar
           playerSelect();
           break;
         case "s":
-          // start new game, zero score
+          // Start new game, zero score
           startGame();
           break;
         case "3":
           // 3 enemies
-          totalEnemies = 3;
+           game.totalEnemies = 3;
           startGame();
           break;
         case "4":
           // 4 enemies
-          totalEnemies = 4;
+           game.totalEnemies = 4;
           startGame();
           break;
         case "5":
           // 5 enemies
-          totalEnemies = 5;
+           game.totalEnemies = 5;
           startGame();
           break;
 
@@ -173,13 +166,14 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.reset = function() {
   this.x = this.startX;
   this.y = this.startY;
-  // compute the new score, block divide-by-zero
+
+  // Compute the new score, block divide-by-zero
   if (game.won + game.lost > 0) {
    game.score = (game.won / (game.won + game.lost)).toPrecision(3);
   }
 }
 
-// the avatar list for selecting player avatar
+// Avatar list for selecting player avatar
 var avatarList =
   [
   "char-boy",
@@ -189,22 +183,13 @@ var avatarList =
   "char-princess-girl"
   ];
 
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-// keep track of wins and losses
+// keep track of game variables
 var game = {
   won: 0,
   lost: 0,
-  score: 0
+  score: 0,
+  totalEnemies: 4
 };
-
-// instantiate enemies and player
-var allEnemies = [];
-var totalEnemies = 4;
-var player = new Player;
 
 var playerSelect = function() {
   // stop the game
@@ -229,7 +214,7 @@ var playerSelect = function() {
 var startGame = function() {
   // remove any existing enemies and generate new ones
   allEnemies.length = 0;
-  for (var i = 0; i < totalEnemies; i++) {
+  for (var i = 0; i <  game.totalEnemies; i++) {
     var enemy = new Enemy;
     allEnemies.push(enemy);
   }
@@ -243,8 +228,11 @@ var startGame = function() {
   }
 }
 
-  // reset initializes player position
-  player.reset();
+// Instantiate enemies and player, start game
+var allEnemies = [];
+var player = new Player;
+startGame();
+player.reset();
 
 
 // This listens for key presses and sends the keys to your
