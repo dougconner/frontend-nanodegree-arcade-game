@@ -64,6 +64,7 @@ var Player = function() {
 
     // The image/sprite for our player, this uses
     // a helper we've provided to easily load images
+    // this.sprite = 'images/char-boy.png';
     this.sprite = 'images/char-boy.png';
 
     // player start and reset position
@@ -92,10 +93,19 @@ Player.prototype.update = function(dt) {
       // First check for the same row
       if(Math.abs(this.y - allEnemies[i].y)< 20) {
         // player and enemy in the same row
-        if(Math.abs(this.x - allEnemies[i].x) < 100) {
-          game.lost++;
-          this.reset();
-          console.log("collision! lost count = " + game.lost);
+        // or selecting new avatar
+        if(Math.abs(this.x - allEnemies[i].x) < 101) {
+          if (player.sprite === 'images/Gem Blue.png') {
+            // selecting a new avatar
+            player.sprite = 'images/' + avatarList[this.x / this.dx] + '.png';
+            // start the game
+            this.reset();
+            startGame();
+          } else {
+            game.lost++;
+            this.reset();
+            console.log("collision! game lost count = " + game.lost);
+          }
         }
       }
     }
@@ -104,6 +114,13 @@ Player.prototype.update = function(dt) {
 // Draw the layer on the screen, required method for game
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.font = "20px serif";
+    ctx.fillText("Wins: ", 20, 40);
+    ctx.fillText(game.won, 40, 80);
+    ctx.fillText("Score: ", 222, 40);
+    ctx.fillText(game.score, 240, 80);
+    ctx.fillText("Losses: ", 434, 40);
+    ctx.fillText(game.lost, 454, 80);
 }
 
 // Keyboard inputs control player motion using this method
@@ -151,7 +168,22 @@ Player.prototype.handleInput = function(key) {
 Player.prototype.reset = function() {
   this.x = this.startX;
   this.y = this.startY;
+  // compute the new score
+  if (game.won + game.lost > 0) {
+   game.score = game.won / (game.won + game.lost);
+  }
 }
+
+// the avatar list for selecting player avatar
+var avatarList =
+  [
+  "char-boy",
+  "char-cat-girl",
+  "char-horn-girl",
+  "char-pink-girl",
+  "char-princess-girl"
+  ];
+
 
 /*
 select player avatar
@@ -177,33 +209,51 @@ reset
 // keep track of wins and losses
 var game = {
   won: 0,
-  lost: 0
-}
+  lost: 0,
+  score: 0
+};
 
 // instantiate enemies and player
 var allEnemies = [];
 var totalEnemies = 4;
 var player = new Player;
 
-var startGame = function() {
-  // don't add enemies if they already exist
-  if (allEnemies.length === 0) {
-    for (var i = 0; i < totalEnemies; i++) {
-      var enemy = new Enemy;
-      allEnemies.push(enemy);
-    }
-  }
-
-  // reset initializes player position
-  player.reset();
-}
-
 var playerSelect = function() {
   // stop the game
   allEnemies.length = 0;
-  var currentAvatar = player.sprite;
-  console.log(currentAvatar);
+  player.sprite = 'images/Gem Blue.png';
+  console.log(player.sprite);
+  // use a loop to instantiate one enemy for each avatar
+  for (var i = 0; i < avatarList.length; i++) {
+    var enemy = new Enemy;
+    // set the enemy.sprite image
+    enemy.sprite = 'images/' + avatarList[i] + '.png';
+    // set the (x, y) position for each avatar
+    enemy.y = enemy.constants.row[1];
+    enemy.x = i * 101;
+    // set enemy.dx = 0 so it won't move
+    enemy.dx = 0;
+    allEnemies.push(enemy);
+  }
+  player.reset();
 }
+
+var startGame = function() {
+  // remove any existing enemies and generate new ones
+  allEnemies.length = 0;
+  for (var i = 0; i < totalEnemies; i++) {
+    var enemy = new Enemy;
+    allEnemies.push(enemy);
+  }
+  // Zero score for a new game
+  game.score = 0;
+  game.won = 0;
+  game.lost = 0;
+}
+
+  // reset initializes player position
+  player.reset();
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
