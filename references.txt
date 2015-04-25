@@ -1,0 +1,20 @@
+Resources:
+Books:
+
+Crockford, Douglas. JavaScript: The Good Parts. O'Reilly, 2008, Print.
+Duckett, John. HTML&CSS design and build websites. Indianapolis, John Wiley & Sons, 2011, Print.
+Zakas, Nicholas. The Principles of Object-Oriented Javascript. San Francisco, No Starch Press, 2014, Print.
+
+Websites, Blogposts:
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript
+https://developer.chrome.com/devtools/docs/console
+http://validator.w3.org/#validate_by_input
+http://udacity.github.io/frontend-nanodegree-styleguide/
+http://stackoverflow.com/
+https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf
+
+Forum:
+http://discussions.udacity.com/t/error-setting-this-sprite-in-player-to-some-of-the-images/14181
+http://discussions.udacity.com/t/make-sure-i-understand-this-correctly-use-of-semi-colons/9250
