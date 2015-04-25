@@ -1,0 +1,24 @@
+Resources:
+Books:
+
+Duckett, John. HTML&CSS design and build websites. Indianapolis, John Wiley & Sons, 2011, Print.
+Myers, Mark. A Smarter Way to Learn JavaScript. published by Author, 2013-2014, Print.
+Crockford, Douglas. JavaScript: The Good Parts. O'Reilly, 2008, Print.
+
+Websites, Blogposts, and Forums:
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+http://api.jquery.com/
+https://developer.chrome.com/devtools/docs/console
+http://json.org/
+http://www.copterlabs.com/blog/json-what-it-is-how-it-works-how-to-use-it/
+http://jsonlint.com/
+https://developer.mozilla.org/en-US/docs/Web (Good place to look for info on all MDN web topics)
+http://helephant.com/2008/08/19/functions-are-first-class-objects-in-javascript/
+https://developers.google.com/maps/documentation/javascript/tutorial
+https://developers.google.com/maps/documentation/javascript/reference
+http://validator.w3.org/#validate_by_input
+http://jigsaw.w3.org/css-validator/#validate_by_input
+http://udacity.github.io/frontend-nanodegree-styleguide/
+http://discussions.udacity.com/c/nd001-2015-02-04
+http://stackoverflow.com/
