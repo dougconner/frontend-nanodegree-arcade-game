@@ -101,13 +101,13 @@ Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
   // Display scoring
-  ctx.font = '20px serif';
-  ctx.fillText('Wins: ', 20, 40);
-  ctx.fillText(game.won, 40, 80);
-  ctx.fillText('Score: ', 222, 40);
-  ctx.fillText(game.score, 240, 80);
-  ctx.fillText('Losses: ', 434, 40);
-  ctx.fillText(game.lost, 454, 80);
+  ctx.font = '20px sans-serif';
+  ctx.fillText('Wins: ', 30, 75);
+  ctx.fillText(game.won, 50, 100);
+  ctx.fillText('Score: ', 230, 75);
+  ctx.fillText(game.score, 250, 100);
+  ctx.fillText('Losses: ', 425, 75);
+  ctx.fillText(game.lost, 450, 100);
 };
 
 // Keyboard inputs control game function
