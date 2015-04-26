@@ -1,3 +1,16 @@
 body {
-    text-align: left;
+  font-family: Arial;
+  font-size: 18px;
+  text-align: center;
+}
+
+.keys {
+  border: 2px solid #888;
+  margin: 0px auto 0px auto;
+  width: 470px;
+  padding: 15px;
+}
+
+p {
+  text-align: left;
 }
